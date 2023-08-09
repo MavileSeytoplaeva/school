@@ -3,49 +3,37 @@ package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.StudentRepository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class StudentService {
-    private final HashMap<Long, Student> students = new HashMap<>(Map.of());
-    private long lastId = 0;
+    private StudentRepository studentRepository;
 
-    public Student createStudent(Student student) {
-        student.setId(lastId++);
-        students.put(student.getId(), student);
-        return student;
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
-    public Student findStudent(long lastId) {
-        if (students.containsKey(lastId)) {
-            return students.get(lastId);
-        }
-        return null;
+    public Student createStudent(Student student) {
+        return studentRepository.save(student);
+    }
+
+    public Student findStudent(long id) {
+        return studentRepository.findById(id).get();
     }
 
     public Student editStudent(Student student) {
-        if (students.containsKey(student.getId())) {
-            students.put(student.getId(), student);
-            return student;
-        }
-        return null;
+        return studentRepository.save(student);
     }
 
-    public Student deleteStudent(long id) {
-        if (students.containsKey(id)){
-            students.remove(id);
-            return students.get(id);
-        }
-        return null;
+    public void deleteStudent(long id) {
+        studentRepository.deleteById(id);
     }
 
-    public List<Long> studentsWithAge(int age) {
-        return students.entrySet().stream()
-                .filter(e -> e.getValue().getAge() == age)
-                .map(Map.Entry::getKey)
+    public List<Student> studentsWithAge(int age) {
+        return studentRepository.findAll().stream()
+                .filter(e -> e.getAge() == age)
                 .toList();
     }
 }

@@ -34,12 +34,13 @@ public class FacultyController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Faculty> deleteFaculty(@PathVariable long id) {
-        return ResponseEntity.ok(facultyService.deleteFaculty(id));
+    public ResponseEntity deleteFaculty(@PathVariable long id) {
+        facultyService.deleteFaculty(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/color/{color}")
-    public ResponseEntity<List<Long>> findFacultyWithSameColor(@PathVariable String color){
+    public ResponseEntity<List<Faculty>> findFacultyWithSameColor(@PathVariable String color){
         if (facultyService.facultyWithColor(color) == null) {
             ResponseEntity.notFound().build();
         }
