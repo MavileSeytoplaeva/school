@@ -1,20 +1,24 @@
 package ru.hogwarts.school.service;
 
-
-import org.springframework.core.CollectionFactory;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.FacultyRepository;
 import ru.hogwarts.school.repositories.StudentRepository;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class StudentService {
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
+    private final FacultyRepository facultyRepository;
 
-    public StudentService(StudentRepository studentRepository) {
+
+
+    public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
         this.studentRepository = studentRepository;
+        this.facultyRepository = facultyRepository;
     }
 
     public Student createStudent(Student student) {
@@ -43,6 +47,15 @@ public class StudentService {
 
     public Collection<Student> getAll() {
         return studentRepository.findAll();
+    }
+
+    public Faculty findStudentsFaculty(Long id) {
+        Student student = studentRepository.findById(id).get();
+        return facultyRepository.findById(student.getFaculty().getId()).get();
+    }
+
+    public Set<Student> findStudentsByFacultyId(Long id) {
+        return studentRepository.findStudentByFaculty_id(id);
     }
 }
 
