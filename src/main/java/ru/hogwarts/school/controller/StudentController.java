@@ -18,11 +18,32 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    @GetMapping("get-five-last-students")
+    public ResponseEntity<Collection<Student>> getFiveLastStudents() {
+        return ResponseEntity.ok(studentService.getFiveLastStudents());
+    }
+
+    @GetMapping("get-average-age")
+    public Long getAverageAge() {
+        return studentService.getAverageAge();
+    }
+
+    @GetMapping("amount-of-students")
+    public Long getAmountOfStudents() {
+        return studentService.getAmountOfStudents();
+    }
+
+
     @GetMapping()
     public ResponseEntity<Collection<Student>> getStudents(@RequestParam(required = false) Integer min,
-                                                           @RequestParam(required = false) Integer max) {
+                                                           @RequestParam(required = false) Integer max,
+                                                           @RequestParam(required = false) int pageNumber,
+                                                           @RequestParam(required = false) int pageSize) {
         if (min != null && max != null) {
             return ResponseEntity.ok(studentService.findAgeBetween(min, max));
+        }
+        if (pageNumber != 0 && pageSize != 0) {
+            return ResponseEntity.ok(studentService.getAll());
         }
         return ResponseEntity.ok(studentService.getAll());
     }

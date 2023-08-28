@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -32,6 +33,10 @@ public class AvatarService {
     public AvatarService(StudentRepository studentRepository, AvatarRepository avatarRepository) {
         this.studentRepository = studentRepository;
         this.avatarRepository = avatarRepository;
+    }
+
+    public List<Avatar> getAll() {
+        return avatarRepository.findAll();
     }
 
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {

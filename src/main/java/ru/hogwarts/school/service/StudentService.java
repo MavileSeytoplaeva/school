@@ -21,6 +21,18 @@ public class StudentService {
         this.facultyRepository = facultyRepository;
     }
 
+    public Collection<Student> getFiveLastStudents() {
+        return studentRepository.getFiveLastStudents();
+    }
+
+    public Long getAmountOfStudents() {
+        return studentRepository.getAmountOfStudents();
+    }
+
+    public Long getAverageAge() {
+        return studentRepository.getAverageAge();
+    }
+
     public Student createStudent(Student student) {
         return studentRepository.save(student);
     }

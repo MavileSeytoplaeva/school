@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("avatar")
@@ -26,8 +28,25 @@ public class AvatarController {
         this.avatarService = avatarService;
     }
 
+    @GetMapping
+    public Collection<ResponseEntity<byte[]>> getAll() {
+        Collection<Avatar> avatars = avatarService.getAll();
+        Collection<ResponseEntity<byte[]>> responses = new ArrayList<>();
+        for (Avatar avatar : avatars) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
+            headers.setContentLength(avatar.getPreview().length);
+            responses.add(ResponseEntity.accepted().body(avatar.getPreview()));
+//            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(avatar.getPreview());
+        }
+        return responses;
+
+    }
+
     @GetMapping(value = "/{id}/avatar-from-db")
+
     public ResponseEntity<byte[]> downloadAvatar(@PathVariable long id) {
+
         Avatar avatar = avatarService.findAvatar(id);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
