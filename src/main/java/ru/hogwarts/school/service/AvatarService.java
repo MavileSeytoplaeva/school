@@ -2,6 +2,8 @@ package ru.hogwarts.school.service;
 
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
@@ -16,6 +18,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
@@ -35,8 +39,16 @@ public class AvatarService {
         this.avatarRepository = avatarRepository;
     }
 
-    public List<Avatar> getAll() {
-        return avatarRepository.findAll();
+    public Collection<String> getAll(Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+
+        Collection<Avatar> avatars = avatarRepository.findAll(pageRequest).getContent();
+        Collection<String> originalFileNames = new ArrayList<>();
+        for (Avatar avatar : avatars) {
+            String originalFileName = avatar.getOriginalFileName();
+            originalFileNames.add(originalFileName);
+        }
+        return originalFileNames;
     }
 
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
@@ -54,6 +66,7 @@ public class AvatarService {
         }
 
         Avatar avatar = findAvatar(studentId);
+        avatar.setOriginalFileName(avatarFile.getOriginalFilename());
         avatar.setStudent(student);
         avatar.setFilePath(filePath.toString());
         avatar.setFileSize(avatarFile.getSize());
