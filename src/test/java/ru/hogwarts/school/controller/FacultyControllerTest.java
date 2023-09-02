@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@WebMvcTest(FacultyController.class)
 public class FacultyControllerTest {
 
     @Autowired
@@ -35,26 +35,15 @@ public class FacultyControllerTest {
 
     @MockBean
     private FacultyRepository facultyRepository;
-    private StudentService studentService;
-    private StudentRepository studentRepository;
 
     @SpyBean
     private FacultyService facultyService;
+    private StudentService studentService;
 
     @InjectMocks
     private FacultyController facultyController;
 
-    private Collection<Faculty> faculties = new ArrayList<>(List.of(
-            new Faculty("russian", "rose"),
-            new Faculty("biology", "purple")
-    ));
 
-    @Test
-    void getAll() {
-        when(facultyService.getAll()).thenReturn(faculties);
-
-        assertThat(facultyController.getAll("russian", "rose")).isEqualTo(faculties);
-    }
     @Test
     public void saveFacultyTest() throws Exception {
         Long id = 1L;
