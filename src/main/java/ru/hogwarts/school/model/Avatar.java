@@ -13,6 +13,16 @@ public class Avatar {
     private long fileSize;
     private String mediaType;
 
+    public String getOriginalFileName() {
+        return originalFileName;
+    }
+
+    public void setOriginalFileName(String originalFileName) {
+        this.originalFileName = originalFileName;
+    }
+
+    private String originalFileName;
+
     @Lob
     private byte[] preview;
 
