@@ -1,8 +1,10 @@
 package ru.hogwarts.school.service;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.AvatarRepository;
 import ru.hogwarts.school.repositories.FacultyRepository;
 import ru.hogwarts.school.repositories.StudentRepository;
 
@@ -13,7 +15,6 @@ import java.util.Set;
 public class StudentService {
     private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;
-
 
 
     public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
@@ -57,9 +58,17 @@ public class StudentService {
         return studentRepository.findByAgeBetween(min, max);
     }
 
+    public Collection<Student> getAllPageable(Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+
+        return studentRepository.findAll(pageRequest).getContent();
+    }
     public Collection<Student> getAll() {
+
         return studentRepository.findAll();
     }
+
+
 
     public Faculty findStudentsFaculty(Long id) {
         Student student = studentRepository.findById(id).get();
@@ -69,5 +78,6 @@ public class StudentService {
     public Set<Student> findStudentsByFacultyId(Long id) {
         return studentRepository.findStudentByFaculty_id(id);
     }
+
 }
 

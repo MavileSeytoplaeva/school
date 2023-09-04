@@ -17,7 +17,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query(value = "SELECT * FROM Student ORDER BY id DESC LIMIT 5", nativeQuery = true)
     Collection<Student> getFiveLastStudents();
-
     Collection<Student> findByAgeBetween(Integer min, Integer max);
 
     Collection<Student> findByAge(Integer age);

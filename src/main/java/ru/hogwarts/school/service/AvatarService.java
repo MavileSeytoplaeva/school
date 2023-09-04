@@ -92,6 +92,10 @@ public class AvatarService {
         }
     }
 
+    public void deleteAvatar(long id) {
+        avatarRepository.deleteById(id);
+    }
+
 
 
 

@@ -1,0 +1,9 @@
+SELECT student.name, student.age, faculty.name
+FROM student
+JOIN faculty ON student.faculty_id = faculty.id
+
+
+SELECT student.name, student.age
+FROM student
+JOIN avatar ON student.id = avatar.student_id
+WHERE avatar.original_file_name IS NOT NULL;

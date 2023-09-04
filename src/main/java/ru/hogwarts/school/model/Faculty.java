@@ -12,14 +12,19 @@ public class Faculty {
     private String name;
     private String color;
 
-    @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "faculty")
     private Set<Student> students;
 
-//    public Faculty() {
-//    }
+    public Faculty() {
+    }
 
-//    public Faculty(Long id, String name, String color) {
-//    }
+    public Faculty(String name, String color) {
+        this.name = name;
+        this.color = color;
+    }
+
+    public Faculty(Long id, String name, String color) {
+    }
 
     public long getId() {
         return id;

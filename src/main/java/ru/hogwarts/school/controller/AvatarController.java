@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collection;
 
 @RestController
@@ -66,6 +65,12 @@ public class AvatarController {
         avatarService.uploadAvatar(studentId, avatar);
         return ResponseEntity.ok().build();
 
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Avatar> deleteAvatar(@PathVariable long id) {
+        avatarService.deleteAvatar(id);
+        return ResponseEntity.ok().build();
     }
 
 

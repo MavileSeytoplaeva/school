@@ -1,12 +1,15 @@
 package ru.hogwarts.school.controller;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.exceptions.FacultyNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("faculty")
@@ -27,13 +30,18 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.getAll());
     }
 
-    @GetMapping("/students")
-    public ResponseEntity<Collection<Student>> getFacultyStudents(Long id) {
+    @GetMapping("/students/{id}")
+    public ResponseEntity<Collection<Student>> getFacultyStudents(@PathVariable Long id) {
         return ResponseEntity.ok(facultyService.findStudentsByFaculty(id));
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Faculty> getFaculty(@PathVariable long id) {
+        try {
+            facultyService.findFaculty(id);
+        } catch (NoSuchElementException | EmptyResultDataAccessException e) {
+            throw new FacultyNotFoundException();
+        }
         return ResponseEntity.ok(facultyService.findFaculty(id));
     }
 
