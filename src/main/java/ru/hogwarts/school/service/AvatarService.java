@@ -1,6 +1,8 @@
 package ru.hogwarts.school.service;
 
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +36,15 @@ public class AvatarService {
     private StudentRepository studentRepository;
     private AvatarRepository avatarRepository;
 
+    Logger logger = LoggerFactory.getLogger(AvatarService.class);
+
     public AvatarService(StudentRepository studentRepository, AvatarRepository avatarRepository) {
         this.studentRepository = studentRepository;
         this.avatarRepository = avatarRepository;
     }
 
     public Collection<String> getAll(Integer pageNumber, Integer pageSize) {
+        logger.debug("Requesting avatars with pageNumber {} and pageSize {}", pageNumber, pageSize);
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
 
         Collection<Avatar> avatars = avatarRepository.findAll(pageRequest).getContent();
@@ -52,6 +57,7 @@ public class AvatarService {
     }
 
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
+        logger.debug("Uploading avatar for student with id {} ", studentId);
         Student student = studentRepository.getById(studentId);
         Path filePath = Path.of(avatarsDir, student + "." + getExtensions(avatarFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
@@ -100,6 +106,7 @@ public class AvatarService {
 
 
     public Avatar findAvatar(Long studentId) {
+        logger.debug("Finding avatar for student with id {}", studentId);
         if (avatarRepository.findByStudentId(studentId) == null){
             return new Avatar();
         } else {

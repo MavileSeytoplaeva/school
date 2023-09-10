@@ -1,6 +1,5 @@
 package ru.hogwarts.school.controller;
 
-import liquibase.pro.packaged.P;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.exceptions.StudentNotFoundException;
