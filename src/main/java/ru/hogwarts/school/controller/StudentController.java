@@ -1,5 +1,6 @@
 package ru.hogwarts.school.controller;
 
+import liquibase.pro.packaged.P;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.exceptions.StudentNotFoundException;
@@ -9,6 +10,7 @@ import ru.hogwarts.school.service.AvatarService;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -20,7 +22,6 @@ public class StudentController {
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
-
 
 
     @GetMapping("get-five-last-students")
@@ -48,7 +49,7 @@ public class StudentController {
             return ResponseEntity.ok(studentService.findAgeBetween(min, max));
         }
         if (pageNumber != null && pageSize != null) {
-            return ResponseEntity.ok(studentService.getAllPageable(pageNumber,pageSize));
+            return ResponseEntity.ok(studentService.getAllPageable(pageNumber, pageSize));
         }
         return ResponseEntity.ok(studentService.getAll());
     }
@@ -62,7 +63,7 @@ public class StudentController {
     public ResponseEntity<Student> getStudent(@PathVariable long id) {
         try {
             studentService.findStudent(id);
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             throw new StudentNotFoundException();
         }
         return ResponseEntity.ok(studentService.findStudent(id));
@@ -92,6 +93,9 @@ public class StudentController {
         return ResponseEntity.ok(studentService.studentsWithAge(age));
     }
 
-
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<Student>> findStudentByName(@PathVariable String name) {
+        return ResponseEntity.ok(studentService.findStudentByName(name));
+    }
 }
 

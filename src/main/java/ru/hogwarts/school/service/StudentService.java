@@ -9,6 +9,7 @@ import ru.hogwarts.school.repositories.FacultyRepository;
 import ru.hogwarts.school.repositories.StudentRepository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -77,6 +78,10 @@ public class StudentService {
 
     public Set<Student> findStudentsByFacultyId(Long id) {
         return studentRepository.findStudentByFaculty_id(id);
+    }
+
+    public List<Student> findStudentByName(String name) {
+        return studentRepository.findStudentByNameIgnoreCase(name);
     }
 
 }
