@@ -2,6 +2,7 @@ package ru.hogwarts.school.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
@@ -10,6 +11,7 @@ import ru.hogwarts.school.repositories.FacultyRepository;
 import java.util.Collection;
 
 @Service
+@Profile("production")
 public class FacultyService {
 
     private final FacultyRepository facultyRepository;

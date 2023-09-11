@@ -4,6 +4,7 @@ import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 @Transactional
+//@Profile("production")
 public class AvatarService {
 
     @Value("${path.to.avatars.folder}")
