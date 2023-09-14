@@ -11,7 +11,6 @@ import ru.hogwarts.school.repositories.FacultyRepository;
 import java.util.Collection;
 
 @Service
-@Profile("production")
 public class FacultyService {
 
     private final FacultyRepository facultyRepository;

@@ -29,7 +29,6 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 @Transactional
-//@Profile("production")
 public class AvatarService {
 
     @Value("${path.to.avatars.folder}")

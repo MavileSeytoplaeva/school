@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-//@Profile("production")
 public class StudentService {
     private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;
