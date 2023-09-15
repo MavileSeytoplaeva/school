@@ -62,11 +62,16 @@ public class FacultyController {
     }
 
     @GetMapping("/color/{color}")
-    public ResponseEntity<Collection<Faculty>> findFacultyWithSameColor(@PathVariable String color){
+    public ResponseEntity<Collection<Faculty>> findFacultyWithSameColor(@PathVariable String color) {
         if (facultyService.facultyWithColor(color) == null) {
             ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(facultyService.facultyWithColor(color));
+    }
+
+    @GetMapping("/name/longest")
+    public ResponseEntity<String> getLongestFacultyName() {
+        return ResponseEntity.ok(facultyService.getLongestFacultyName());
     }
 }
 

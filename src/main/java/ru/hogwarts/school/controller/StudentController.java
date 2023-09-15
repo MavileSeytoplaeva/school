@@ -11,6 +11,7 @@ import ru.hogwarts.school.service.StudentService;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("student")
@@ -95,6 +96,23 @@ public class StudentController {
     @GetMapping("/name/{name}")
     public ResponseEntity<List<Student>> findStudentByName(@PathVariable String name) {
         return ResponseEntity.ok(studentService.findStudentByName(name));
+    }
+
+    @GetMapping("/name/A")
+    public ResponseEntity<Collection<String>> findStudentsWhosNameStartsWithA() {
+        return ResponseEntity.ok(studentService.findStudentNameStartWithA());
+    }
+
+    @GetMapping("/age/average")
+    public ResponseEntity<Integer> getAverageAgeByStream() {
+        return ResponseEntity.ok(studentService.getAverageAgeByStream());
+    }
+
+    @GetMapping("/getSum")
+    public int getSum() {
+        return Stream.iterate(1, a -> a +1)
+                .limit(1_000_000)
+                .reduce(0, Integer::sum);
     }
 }
 
