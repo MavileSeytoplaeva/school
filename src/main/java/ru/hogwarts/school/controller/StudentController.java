@@ -1,5 +1,6 @@
 package ru.hogwarts.school.controller;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.exceptions.StudentNotFoundException;
@@ -110,9 +111,19 @@ public class StudentController {
 
     @GetMapping("/getSum")
     public int getSum() {
-        return Stream.iterate(1, a -> a +1)
+        return Stream.iterate(1, a -> a + 1)
                 .limit(1_000_000)
                 .reduce(0, Integer::sum);
+    }
+
+    @GetMapping("/get/thread")
+    public void printStudentsWithThreads() {
+        studentService.getAllStudentsForThreads();
+    }
+
+    @GetMapping("get/synchronized")
+    public void printSync() {
+        studentService.syncThreads();
     }
 }
 

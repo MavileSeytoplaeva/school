@@ -127,5 +127,30 @@ public class StudentService {
                 .orElse(Double.NaN);
     }
 
+    public void getAllStudentsForThreads() {
+        List<Student> students = studentRepository.findAll();
+        System.out.println(students.get(0));
+        System.out.println(students.get(1));
+
+        new Thread(() -> {
+            System.out.println(students.get(2));
+            System.out.println(students.get(3));
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(students.get(4));
+            System.out.println(students.get(5));
+        }).start();
+    }
+
+    public void syncThreads() {
+        synchronized (StudentService.class) {
+            List<Student> students = studentRepository.findAll();
+            for (int i = 0; i < 6; i++) {
+                System.out.println(students.get(i));
+            }
+        }
+    }
+
 }
 
