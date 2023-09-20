@@ -1,54 +1,87 @@
 package ru.hogwarts.school.service;
 
-import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.FacultyRepository;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class FacultyService {
 
-    private final HashMap<Long, Faculty> faculties = new HashMap<>();
-    private long lastId = 0;
+    private final FacultyRepository facultyRepository;
+    public StudentService studentService;
+
+    Logger logger = LoggerFactory.getLogger(FacultyService.class);
+
+    public FacultyService(FacultyRepository facultyRepository, StudentService studentService) {
+        this.facultyRepository = facultyRepository;
+        this.studentService = studentService;
+    }
 
     public Faculty createFaculty(Faculty faculty) {
-        faculty.setId(lastId++);
-        faculties.put(faculty.getId(), faculty);
-        return faculty;
+        logger.debug("Creating faculty");
+
+        return facultyRepository.save(faculty);
     }
 
     public Faculty findFaculty(long id) {
-        if (faculties.containsKey(id)) {
-            return faculties.get(id);
-        }
-        return null;
+        logger.debug("Finding faculty by id {}", id);
+
+        return facultyRepository.findById(id).get();
     }
 
     public Faculty editFaculty(Faculty faculty) {
-        if (faculties.containsKey(faculty.getId())) {
-            faculties.put(faculty.getId(), faculty);
-            return faculty;
-        }
-        return null;
+        logger.debug("Editing faculty");
+
+        return facultyRepository.save(faculty);
     }
 
-    public Faculty deleteFaculty(long id) {
-        if (faculties.containsKey(id)) {
-            faculties.remove(id);
-            return faculties.get(id);
-        }
-        return null;
+    public void deleteFaculty(long id) {
+        logger.debug("Deleting faculty by id {}", id);
+
+        facultyRepository.deleteById(id);
     }
 
-    public List<Long> facultyWithColor(String color) {
-        return faculties.entrySet().stream()
-                .filter(e -> e.getValue().getColor().equals(color))
-                .map(Map.Entry::getKey)
-                .toList();
+    public Collection<Faculty> facultyWithColor(String color) {
+        logger.debug("Getting faculty by color {}", color);
+
+        return facultyRepository.findByColorIgnoreCase(color);
     }
+
+    public Collection<Faculty> getAll() {
+        logger.debug("Getting all faculties");
+
+        return facultyRepository.findAll();
+    }
+
+    public Collection<Faculty> findByNameOrColor(String name, String color) {
+        logger.debug("Finding faculty by name {} or color {}", name, color);
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(name, color);
+    }
+
+    public Collection<Student> findStudentsByFaculty(long id) {
+        logger.debug("Getting faculty students by faculty id {}", id);
+
+        return studentService.findStudentsByFacultyId(id);
+    }
+
+    public String getLongestFacultyName() {
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .filter(Objects::nonNull)
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
+    }
+
+
 
 }
 
