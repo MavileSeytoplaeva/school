@@ -2,6 +2,7 @@ package ru.hogwarts.school.controller;
 
 import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,8 +24,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @WebMvcTest(FacultyController.class)
 public class FacultyControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -35,6 +38,7 @@ public class FacultyControllerTest {
 
     @SpyBean
     private FacultyService facultyService;
+
 
     @Test
     public void testGetAll() throws Exception {
@@ -124,13 +128,14 @@ public class FacultyControllerTest {
         when(facultyRepository.findById(any(Long.class))).thenReturn(Optional.of(faculty));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/faculty")
+                        .post("/faculty") //send
                         .content(facultyObject.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isOk()) //receive
                 .andExpect(jsonPath("$.color").value(color))
                 .andExpect(jsonPath("$.name").value(name));
+
     }
 
     @Test
@@ -164,4 +169,8 @@ public class FacultyControllerTest {
                 .andExpect(jsonPath("$[1].color").value("blue"));
 
     }
+
+
+
+
 }
